@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { User, Role, Organization } from '@org/data';
+import { User, Role, Organization, Task } from '@org/data';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { AppController } from './app.controller';
@@ -9,6 +9,7 @@ import { AppService } from './app.service';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
 import { AuthModule } from './auth/auth.module';
+import { TasksModule } from './tasks/tasks.module';
 
 @Module({
   imports: [
@@ -26,14 +27,15 @@ import { AuthModule } from './auth/auth.module';
         username: process.env.DATABASE_USER,
         password: process.env.DATABASE_PASSWORD,
         database: process.env.DATABASE_NAME,
-        entities: [User, Role, Organization],
+        entities: [User, Role, Organization, Task],
         synchronize: true, // dev only
       })
     }),
-    TypeOrmModule.forFeature([User, Role, Organization]),
+    TypeOrmModule.forFeature([User, Role, Organization, Task]),
      UsersModule,
      RolesModule,
-     AuthModule
+     AuthModule,
+     TasksModule
   ],
   controllers: [AppController],
   providers: [AppService], 
