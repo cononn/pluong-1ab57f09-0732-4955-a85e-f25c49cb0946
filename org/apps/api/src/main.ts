@@ -3,12 +3,18 @@
  * This is only a minimal backend to get started.
  */
 
+import 'reflect-metadata';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app/app.module';
+import { RolesService } from './app/roles/roles.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  const rolesService = app.get(RolesService);
+  await rolesService.seed();
+
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3000;
