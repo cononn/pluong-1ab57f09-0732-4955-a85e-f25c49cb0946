@@ -9,19 +9,4 @@ export class RolesService {
     @InjectRepository(Role)
     private repo: Repository<Role>,
   ) {}
-
-  async seed() {
-    const roles = [
-      { name: RoleType.OWNER, hierarchyLevel: 3 },
-      { name: RoleType.ADMIN, hierarchyLevel: 2 },
-      { name: RoleType.VIEWER, hierarchyLevel: 1 },
-    ];
-
-    for (const role of roles) {
-      const exists = await this.repo.findOne({ where: { name: role.name } });
-      if (!exists) {
-        await this.repo.save(role);
-      }
-    }
-  }
 }

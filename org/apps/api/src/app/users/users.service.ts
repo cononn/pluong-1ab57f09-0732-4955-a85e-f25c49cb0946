@@ -31,14 +31,14 @@ export class UsersService {
     return safeUser;
   }
 
+  findAll() {
+    return this.userRepo.find();
+  }
+
   async findById(id: string) {
     return this.userRepo.findOne({
       where: { id },
       relations: ['role', 'organization'],
     });
-  }
-
-  findAll() {
-    return this.userRepo.find();
   }
 }
