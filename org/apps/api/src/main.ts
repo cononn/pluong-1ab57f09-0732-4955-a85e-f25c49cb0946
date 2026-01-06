@@ -15,6 +15,10 @@ import { User, Role, RoleType, Organization } from '@org/data';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: 'http://localhost:4200',
+  })
+
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User));
   const roleRepo = app.get<Repository<Role>>(getRepositoryToken(Role));
   const orgRepo = app.get<Repository<Organization>>(getRepositoryToken(Organization));

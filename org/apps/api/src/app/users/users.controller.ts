@@ -10,14 +10,4 @@ export class UsersController {
     console.log('GET /users route accessed');
     return this.usersService.findAll();
   }
-
-  @Post('login')
-  login(
-    @Body() body: { email: string; password: string },
-  ) {
-    return this.usersService.validateUser(
-      body.email,
-      body.password,
-    );
-  }
 }

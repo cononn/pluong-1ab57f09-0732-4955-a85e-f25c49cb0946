@@ -8,8 +8,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersController } from './users/users.controller';
 import { UsersService } from './users/users.service';
-//import { Organization } from '@org/data';
-//import { Role } from '@org/data';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -33,7 +32,8 @@ import { UsersService } from './users/users.service';
     }),
     TypeOrmModule.forFeature([User, Role, Organization]),
      UsersModule,
-     RolesModule
+     RolesModule,
+     AuthModule
   ],
   controllers: [AppController],
   providers: [AppService], 
