@@ -19,6 +19,11 @@ export class TasksController {
     return this.tasksService.create(createTaskDto, user);
   }
 
+@Get('all')
+async getAllTasksTest() {
+  return this.tasksService.findAllTest();
+}
+
   // List tasks accessible to this user
   @Get()
   findAll(@Users() user: UserEntity) {

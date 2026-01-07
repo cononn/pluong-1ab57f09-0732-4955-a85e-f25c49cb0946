@@ -1,0 +1,24 @@
+<div class="max-w-4xl mx-auto mt-10">
+  <h2 class="text-xl mb-4">Tasks</h2>
+
+  <p *ngIf="error" class="text-red-500">{{ error }}</p>
+
+  <table class="w-full border-collapse border">
+    <thead>
+      <tr class="bg-gray-200">
+        <th class="border p-2">Title</th>
+        <th class="border p-2">Description</th>
+        <th class="border p-2">Status</th>
+        <th class="border p-2">Organization</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let task of tasks" class="hover:bg-gray-100">
+        <td class="border p-2">{{ task.title }}</td>
+        <td class="border p-2">{{ task.description }}</td>
+        <td class="border p-2">{{ task.status }}</td>
+        <td class="border p-2">{{ task.organization.name }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

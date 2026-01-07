@@ -1,8 +1,3 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
-
 import 'reflect-metadata';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
@@ -10,7 +5,8 @@ import { AppModule } from './app/app.module';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcryptjs';
-import { User, Role, RoleType, Organization } from '@org/data';
+import { User, Role, RoleType, Organization, Task } from '@org/data';
+export type TaskStatus = 'Open' | 'In Progress' | 'On-Hold' | 'Completed';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -22,10 +18,12 @@ async function bootstrap() {
   const userRepo = app.get<Repository<User>>(getRepositoryToken(User));
   const roleRepo = app.get<Repository<Role>>(getRepositoryToken(Role));
   const orgRepo = app.get<Repository<Organization>>(getRepositoryToken(Organization));
+  const taskRepo = app.get<Repository<Task>>(getRepositoryToken(Task));
 
   await seedRoles(roleRepo);
   await seedOrganizations(orgRepo);
   await seedStaticUsers(userRepo, roleRepo, orgRepo);
+  await seedTasks(taskRepo, orgRepo);
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
@@ -108,7 +106,6 @@ async function seedStaticUsers(
   ];
 
   for (const u of usersToSeed) {
-    // skip if user already exists
     const existing = await userRepo.findOne({ where: { email: u.email } });
     if (existing) continue;
 
@@ -129,5 +126,57 @@ async function seedStaticUsers(
     });
 
     await userRepo.save(user);
+  }
+}
+
+async function seedTasks(
+  taskRepo: Repository<Task>,
+  orgRepo: Repository<Organization>
+) {
+  const tasksToSeed = [
+    {
+      title: 'Setup project repo',
+      description: 'Initialize Nx monorepo with NestJS & Angular',
+      orgName: 'Company',
+      status: 'Open',
+    },
+    {
+      title: 'Implement auth module',
+      description: 'Add JWT auth and RBAC logic',
+      orgName: 'Management Team',
+      status: 'In Progress',
+    },
+    {
+      title: 'Create dashboard UI',
+      description: 'Basic login + task list page',
+      orgName: 'Developer Team',
+      status: 'Open',
+    },
+    {
+      title: 'Write unit tests',
+      description: 'Add tests for tasks and auth',
+      orgName: 'Developer Team',
+      status: 'On-Hold',
+    },
+  ];
+
+  for (const t of tasksToSeed) {
+    const exists = await taskRepo.findOne({ where: { title: t.title } });
+    if (exists) continue;
+
+    const org = await orgRepo.findOne({ where: { name: t.orgName } });
+    if (!org) {
+      console.error(`Cannot create task "${t.title}": organization not found`);
+      continue;
+    }
+
+    const task = taskRepo.create({
+      title: t.title,
+      description: t.description,
+      status: t.status as TaskStatus,
+      organization: org,
+    });
+
+    await taskRepo.save(task);
   }
 }

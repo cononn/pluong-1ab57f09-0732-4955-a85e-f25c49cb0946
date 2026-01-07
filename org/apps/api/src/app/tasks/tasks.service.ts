@@ -7,6 +7,8 @@ import { User } from '@org/data';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 
+export type TaskStatus = 'Open' | 'In Progress' | 'On-Hold' | 'Completed';
+
 @Injectable()
 export class TasksService {
   constructor(
@@ -16,12 +18,19 @@ export class TasksService {
 
   // Create a new task in the user's organization
   async create(createTaskDto: CreateTaskDto, user: User) {
-    const task = this.taskRepo.create({
-      ...createTaskDto,
-      organization: user.organization,
-    });
-    return this.taskRepo.save(task);
-  }
+  const task = this.taskRepo.create({
+    title: createTaskDto.title,
+    description: createTaskDto.description,
+    status: createTaskDto.status as TaskStatus,
+    organization: user.organization,
+  });
+
+  return this.taskRepo.save(task);
+}
+
+async findAllTest() {
+  return this.taskRepo.find({ relations: ['organization'] });
+}
 
   // Get all tasks in the user's organization
   async findAll(user: User) {

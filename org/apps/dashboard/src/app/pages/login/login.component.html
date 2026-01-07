@@ -1,0 +1,28 @@
+<div class="max-w-sm mx-auto mt-20 p-6 shadow rounded">
+  <h2 class="text-xl mb-4">Login</h2>
+
+  <label class="block mb-2">Email</label>
+  <input
+    type="email"
+    [(ngModel)]="email"
+    placeholder="Enter email"
+    class="border p-2 w-full mb-3"
+  />
+
+  <label class="block mb-2">Password</label>
+  <input
+    type="password"
+    [(ngModel)]="password"
+    placeholder="Enter password"
+    class="border p-2 w-full mb-3"
+  />
+
+  <button
+    class="bg-blue-600 text-white px-4 py-2 w-full"
+    (click)="login()"
+  >
+    Login
+  </button>
+
+  <p *ngIf="error" class="text-red-500 mt-2">{{ error }}</p>
+</div>
