@@ -16,12 +16,10 @@ export class TasksService {
     };
   }
 
-  // Get all tasks for logged-in user
   getAllTasks() {
     return this.http.get<any[]>(`${this.apiUrl}/all`, this.getAuthHeaders());
   }
 
-  // Create a task
   createTask(title: string, description?: string, status?: string) {
     return this.http.post(
       this.apiUrl,
@@ -30,3 +28,4 @@ export class TasksService {
     );
   }
 }
+
